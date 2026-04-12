@@ -4,7 +4,6 @@ from django.utils.text import slugify
 from unidecode import unidecode
 
 
-
 class Category(models.Model):
     name = models.CharField(max_length=50)
     slug = models.SlugField(max_length=100, unique=True, blank=True)

@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+	{{ course.title }}
+{% endblock %}
+
+{% block body %}
+	<h1>{{ course.title }}</h1>
+    <p>Price: {{ course.price }}</p>
+    <p>{{ course.description }}</p>
+
+    <h3>Lessonos:</h3>
+    {% for lesson in course.lessons.all %}
+        <a href="#">{{ lesson.title }}</a>
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+	Courses List
+{% endblock %}
+
+{% block body %}
+	<h1>Courses:</h1>
+
+    {% for cours in courses %}
+        <div>
+            <a href="{% url 'main:course_detail' cours.slug %}">{{ cours.title }}</a>
+            <p>Category: {{ cours.category }}</p>
+            <p>Price: {{ cours.price }}</p>
+
+            <p>Teachers:</p>
+            {% for teacher in cours.teachers.all %}
+            	<p>{{ teacher.first_name }}{{ teacher.last_name }}</p>
+            {% endfor %}
+
+            <p>Number students: {{ cours.students.all.count }}</p>
+        </div>
+    {% endfor %}
+
+{% endblock %}
