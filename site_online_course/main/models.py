@@ -67,6 +67,13 @@ class Lesson(models.Model):
     content = models.TextField()
     video_url = models.URLField(null=True, blank=True)
     order = models.PositiveIntegerField(default=0)
+    slug = models.SlugField(max_length=100, blank=True, unique=True)
 
     def __str__(self):
         return f"{self.title} from {self.course}"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(unidecode(self.title))
+        super().save(*args, **kwargs)
+

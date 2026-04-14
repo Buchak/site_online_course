@@ -11,7 +11,7 @@
 
     <h3>Lessonos:</h3>
     {% for lesson in course.lessons.all %}
-        <a href="#">{{ lesson.title }}</a>
+        <a href="{% url 'main:lesson_detail' course.slug lesson.slug %}">{{ lesson.title }}</a>
     {% endfor %}
 
 {% endblock %}

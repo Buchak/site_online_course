@@ -193,6 +193,10 @@ class LessonAdmin(admin.ModelAdmin):
         }),
         ('Video Url', {
             'fields': ('video_url',)
+        }),
+        ('Slug', {
+            'fields': ('slug',),
+            'classes': ('collapse',)
         })
     )
 
