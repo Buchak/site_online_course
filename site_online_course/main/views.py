@@ -37,4 +37,7 @@ def category_list(request):
     return render(request, "main/category_list.html", context=context)
 
 def category_detail(request, category_slug):
-    pass
+    context = {
+        "category": Category.objects.get(slug=category_slug)
+    }
+    return render(request, "main/category_detail.html", context=context)

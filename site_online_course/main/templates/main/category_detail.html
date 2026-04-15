@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+	Category {{ category.name }}
+{% endblock %}
+
+{% block body %}
+	<h1>Courses from category{{ category.name }}</h1>
+    <ul>
+        {% for course in category.courses.all %}
+            <li>
+                <a href="#">{{ course.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
