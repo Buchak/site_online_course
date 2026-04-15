@@ -1,0 +1,17 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+	Categories
+{% endblock %}
+
+{% block body %}
+	<h1>Categories</h1>
+    <ul>
+        {% for category in categories %}
+            <li>
+                <a href="{% url 'main:category_detail' category.slug %}">{{ category.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}

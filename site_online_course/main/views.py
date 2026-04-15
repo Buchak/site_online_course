@@ -35,3 +35,6 @@ def category_list(request):
         "categories": Category.objects.prefetch_related("courses").all()
     }
     return render(request, "main/category_list.html", context=context)
+
+def category_detail(request, category_slug):
+    pass
