@@ -33,13 +33,13 @@ def students_list(request, course_slug):
 
 def category_list(request):
     context = {
-        "categories": Category.objects.prefetch_related("courses").all()
+        "categories": Category.objects.all()
     }
     return render(request, "main/category_list.html", context=context)
 
 
 def category_detail(request, category_slug):
     context = {
-        "category": Category.objects.get(slug=category_slug)
+        "category": Category.objects.prefetch_related("courses").get(slug=category_slug)
     }
     return render(request, "main/category_detail.html", context=context)
