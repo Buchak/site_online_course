@@ -1,0 +1,16 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+	Students list
+{% endblock %}
+
+{% block body %}
+	<h1>Students list</h1>
+
+    <div>
+    {% for student in students %}
+    	<p>{{ student }}</p>
+    {% endfor %}
+
+    </div>
+{% endblock %}

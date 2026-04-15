@@ -14,4 +14,9 @@
         <a href="{% url 'main:lesson_detail' course.slug lesson.slug %}">{{ lesson.title }}</a>
     {% endfor %}
 
+    <div>
+    <h4>Students list</h4>
+    <a href="{% url 'main:students_list' course.slug %}">Students</a>
+    </div>
+
 {% endblock %}

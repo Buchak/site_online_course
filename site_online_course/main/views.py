@@ -24,7 +24,7 @@ def lesson_detail(request, course_slug, lesson_slug):
     return render(request, "main/lesson_detail.html", context=context)
 
 
-def student_list(request, course_slug):
+def students_list(request, course_slug):
     context = {
         "students": Course.objects.get(slug=course_slug).students.all()
     }
