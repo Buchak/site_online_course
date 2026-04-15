@@ -1,0 +1,18 @@
+{% extends 'main/base.html' %}
+
+{% block title %}
+	{{ lesson.title }}
+{% endblock %}
+
+{% block body %}
+    <h1>{{ lesson.title }}</h1>
+	<div>
+    <h3>Content</h3>
+    <p>{{ lesson.content }}</p>
+    </div>
+    
+    <div>
+    <h3>Video</h3>
+        <a href="#">Video</a>
+    </div>
+{% endblock %}
