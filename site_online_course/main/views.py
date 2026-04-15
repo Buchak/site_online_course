@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Course
+from .models import Course, Category
 
 
 def courses_list(request):
@@ -29,3 +29,9 @@ def students_list(request, course_slug):
         "students": Course.objects.get(slug=course_slug).students.all()
     }
     return render(request, "main/students_list.html", context=context)
+
+def category_list(request):
+    context = {
+        "categories": Category.objects.prefetch_related("courses").all()
+    }
+    return render(request, "main/category_list.html", context=context)
