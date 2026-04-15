@@ -21,11 +21,11 @@ def lesson_detail(request, course_slug, lesson_slug):
     context = {
         "lesson": course.lessons.get(slug=lesson_slug)
     }
-    return render(request, "main.lesson_detail.html", context=context)
+    return render(request, "main/lesson_detail.html", context=context)
 
 
 def student_list(request, course_slug):
     context = {
         "students": Course.objects.get(slug=course_slug).students.all()
     }
-    return render(request, "main/srudents_list.html", context=context)
+    return render(request, "main/students_list.html", context=context)
