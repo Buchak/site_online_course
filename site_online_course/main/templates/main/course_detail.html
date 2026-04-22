@@ -19,4 +19,9 @@
     <a href="{% url 'main:students_list' course.slug %}">Students</a>
     </div>
 
+    <br>
+    <div>
+        <a href="{% url 'main:enrollment_course' course.slug %}">Enrollment on course</a>
+    </div>
+
 {% endblock %}

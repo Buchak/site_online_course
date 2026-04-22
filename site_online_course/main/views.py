@@ -1,5 +1,8 @@
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-from .models import Course, Category
+from django.shortcuts import get_object_or_404, redirect
+
+from .models import Course, Category, Student
 
 
 def courses_list(request):
@@ -43,3 +46,26 @@ def category_detail(request, category_slug):
         "category": Category.objects.prefetch_related("courses").get(slug=category_slug)
     }
     return render(request, "main/category_detail.html", context=context)
+
+
+def enrollment_course(request: HttpRequest, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+
+    if request.method == "POST" and request.POST.get("email"):
+        student_email = request.POST.get("email")
+        student = Student.objects.get(email=student_email)
+
+        if student not in course.students.all():
+            course.students.add(student)
+
+            return redirect('main:course_detail', course_slug=course.slug)
+        else:
+            return HttpResponse("Email already registered", status=400)
+
+        return HttpResponse("Method not allowed", status=405)
+
+    context = {
+        "course": course
+    }
+
+    return render(request, "main/enrollment_course.html", context=context)
