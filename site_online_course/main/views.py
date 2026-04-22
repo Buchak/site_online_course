@@ -49,7 +49,7 @@ def category_detail(request, category_slug):
 
 
 def enrollment_course(request: HttpRequest, course_slug):
-    course = get_object_or_404(Course, slug=course_slug)
+    course = get_object_or_404(Course.objects.prefetch_related("students"), slug=course_slug)
 
     if request.method == "POST" and request.POST.get("email"):
         student_email = request.POST.get("email")
@@ -69,7 +69,7 @@ def enrollment_course(request: HttpRequest, course_slug):
     return render(request, "main/enrollment_course.html", context=context)
 
 def unenrollment_course(request: HttpRequest, course_slug):
-    course = get_object_or_404(Course, slug=course_slug)
+    course = get_object_or_404(Course.objects.prefetch_related("students"), slug=course_slug)
 
     if request.method == "POST" and request.POST.get("email"):
         student_email = request.POST.get("email")
