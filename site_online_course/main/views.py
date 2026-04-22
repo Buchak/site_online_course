@@ -69,3 +69,25 @@ def enrollment_course(request: HttpRequest, course_slug):
     }
 
     return render(request, "main/enrollment_course.html", context=context)
+
+def unenrollment_course(request: HttpRequest, course_slug):
+    course = get_object_or_404(Course, slug=course_slug)
+
+    if request.method == "POST" and request.POST.get("email"):
+        student_email = request.POST.get("email")
+        student = Student.objects.get(email=student_email)
+
+        if student in course.students.all():
+            course.students.remove(student)
+
+            return redirect('main:course_detail', course_slug=course.slug)
+        else:
+            return HttpResponse("Student not enrolled in course", status=400)
+
+        return HttpResponse("Method not allowed", status=405)
+
+    context = {
+        "course": course
+    }
+
+    return render(request, "main/unenrollment_course.html", context=context)
