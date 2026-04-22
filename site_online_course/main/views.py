@@ -53,16 +53,14 @@ def enrollment_course(request: HttpRequest, course_slug):
 
     if request.method == "POST" and request.POST.get("email"):
         student_email = request.POST.get("email")
-        student = Student.objects.get(email=student_email)
+        student = get_object_or_404(Student, email=student_email)
 
-        if student not in course.students.all():
+        if not course.students.filter(email=student_email).exists():
             course.students.add(student)
 
             return redirect('main:course_detail', course_slug=course.slug)
         else:
             return HttpResponse("Email already registered", status=400)
-
-        return HttpResponse("Method not allowed", status=405)
 
     context = {
         "course": course
@@ -75,16 +73,14 @@ def unenrollment_course(request: HttpRequest, course_slug):
 
     if request.method == "POST" and request.POST.get("email"):
         student_email = request.POST.get("email")
-        student = Student.objects.get(email=student_email)
+        student = get_object_or_404(Student, email=student_email)
 
-        if student in course.students.all():
+        if course.students.filter(email=student_email).exists():
             course.students.remove(student)
 
             return redirect('main:course_detail', course_slug=course.slug)
         else:
             return HttpResponse("Student not enrolled in course", status=400)
-
-        return HttpResponse("Method not allowed", status=405)
 
     context = {
         "course": course
