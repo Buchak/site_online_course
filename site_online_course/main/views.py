@@ -1,22 +1,45 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect
+from django.views import View
+from django.views.generic import TemplateView, ListView, DetailView
 
-from .models import Course, Category, Student
-
-
-def courses_list(request):
-    context = {
-        "courses": Course.objects.prefetch_related("teachers", "students").all(),
-    }
-    return render(request, 'main/courses_list.html', context)
+from .models import Course, Category, Student, Lesson
+from . import forms
 
 
-def course_detail(request, course_slug):
-    context = {
-        "course": Course.objects.get(slug=course_slug),
-    }
-    return render(request, "main/course_detail.html", context=context)
+# def courses_list(request):
+#     context = {
+#         "courses": Course.objects.prefetch_related("teachers", "students").all(),
+#     }
+#     return render(request, 'main/course_list.html', context)
+
+
+class CoursesListView(ListView):
+    queryset = (
+        Course.objects.prefetch_related("teachers", "students")
+    )
+    context_object_name = "courses"
+
+
+# def course_detail(request, course_slug):
+#     context = {
+#         "course": Course.objects.get(slug=course_slug),
+#     }
+#     return render(request, "main/course_detail.html", context=context)
+
+
+class CourseDetailsView(DetailView):
+    template_name = 'main/course_detail.html'
+    model = Course
+    context_object_name = 'course'
+    slug_url_kwarg = 'course_slug'
+
+
+class LessonDetilView(DetailView):
+    template_name = 'main/lesson_detail.html'
+    model = Course
+    context_object_name = 'lesson'
 
 
 def lesson_detail(request, course_slug, lesson_slug):
@@ -27,11 +50,16 @@ def lesson_detail(request, course_slug, lesson_slug):
     return render(request, "main/lesson_detail.html", context=context)
 
 
-def students_list(request, course_slug):
-    context = {
-        "students": Course.objects.get(slug=course_slug).students.all()
-    }
-    return render(request, "main/students_list.html", context=context)
+# def students_list(request, course_slug):
+#     context = {
+#         "students": Course.objects.get(slug=course_slug).students.all()
+#     }
+#     return render(request, "main/student_list.html", context=context)
+
+
+class StudentsListView(ListView):
+    model = Student
+    context_object_name = 'students'
 
 
 def category_list(request):
@@ -68,6 +96,7 @@ def enrollment_course(request: HttpRequest, course_slug):
 
     return render(request, "main/enrollment_course.html", context=context)
 
+
 def unenrollment_course(request: HttpRequest, course_slug):
     course = get_object_or_404(Course.objects.prefetch_related("students"), slug=course_slug)
 
@@ -87,3 +116,33 @@ def unenrollment_course(request: HttpRequest, course_slug):
     }
 
     return render(request, "main/unenrollment_course.html", context=context)
+
+
+def create_course(request: HttpRequest):
+    if request.method == 'POST':
+        form = forms.CourseForm(request.POST)
+        if form.is_valid():
+            Course.objects.create(**form.cleaned_data)
+            return redirect('main:courses_list')
+    else:
+        form = forms.CourseForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, "main/create-course.html", context=context)
+
+
+def create_lesson(request: HttpRequest):
+    if request.method == 'POST':
+        form = forms.LessonForm(request.POST)
+        if form.is_valid():
+            Lesson.objects.create(**form.cleaned_data)
+            return redirect('main:courses_list')
+    else:
+        form = forms.LessonForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, "main/create-lesson.html", context=context)

@@ -37,8 +37,6 @@ class Student(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
-
-
 class Course(models.Model):
     category = models.ForeignKey(Category, related_name='courses', on_delete=models.CASCADE)
     teachers = models.ManyToManyField(Teacher, related_name='courses')
