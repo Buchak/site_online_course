@@ -76,73 +76,150 @@ def category_detail(request, category_slug):
     return render(request, "main/category_detail.html", context=context)
 
 
-def enrollment_course(request: HttpRequest, course_slug):
-    course = get_object_or_404(Course.objects.prefetch_related("students"), slug=course_slug)
-
-    if request.method == "POST" and request.POST.get("email"):
-        student_email = request.POST.get("email")
-        student = get_object_or_404(Student, email=student_email)
-
-        if not course.students.filter(email=student_email).exists():
-            course.students.add(student)
-
-            return redirect('main:course_detail', course_slug=course.slug)
-        else:
-            return HttpResponse("Email already registered", status=400)
-
-    context = {
-        "course": course
-    }
-
-    return render(request, "main/enrollment_course.html", context=context)
-
-
-def unenrollment_course(request: HttpRequest, course_slug):
-    course = get_object_or_404(Course.objects.prefetch_related("students"), slug=course_slug)
-
-    if request.method == "POST" and request.POST.get("email"):
-        student_email = request.POST.get("email")
-        student = get_object_or_404(Student, email=student_email)
-
-        if course.students.filter(email=student_email).exists():
-            course.students.remove(student)
-
-            return redirect('main:course_detail', course_slug=course.slug)
-        else:
-            return HttpResponse("Student not enrolled in course", status=400)
-
-    context = {
-        "course": course
-    }
-
-    return render(request, "main/unenrollment_course.html", context=context)
+# def enrollment_course(request: HttpRequest, course_slug):
+#     course = get_object_or_404(Course.objects.prefetch_related("students"), slug=course_slug)
+#
+#     if request.method == "POST" and request.POST.get("email"):
+#         student_email = request.POST.get("email")
+#         student = get_object_or_404(Student, email=student_email)
+#
+#         if not course.students.filter(email=student_email).exists():
+#             course.students.add(student)
+#
+#             return redirect('main:course_detail', course_slug=course.slug)
+#         else:
+#             return HttpResponse("Email already registered", status=400)
+#
+#     context = {
+#         "course": course
+#     }
+#
+#     return render(request, "main/enrollment_course.html", context=context)
 
 
-def create_course(request: HttpRequest):
-    if request.method == 'POST':
+class EnrollmentCourseView(View):
+    def get_course(self, course_slug):
+        return get_object_or_404(Course.objects.prefetch_related("students"), slug=course_slug)
+
+    def get(self, request: HttpRequest, course_slug):
+        context = {
+            'course': self.get_course(course_slug),
+        }
+        return render(request, 'main/enrollment_course.html', context=context)
+
+    def post(self, request: HttpRequest, course_slug):
+        course = self.get_course(course_slug)
+
+        if request.POST.get('email'):
+            student_email = request.POST.get('email')
+            student = get_object_or_404(Student, email=student_email)
+
+            if not course.students.filter(email=student_email).exists():
+                course.students.add(student)
+                return redirect('main:course_detail', course_slug=course_slug)
+            else:
+                return HttpResponse("Email already registered", status=400)
+
+
+# def unenrollment_course(request: HttpRequest, course_slug):
+#     course = get_object_or_404(Course.objects.prefetch_related("students"), slug=course_slug)
+#
+#     if request.method == "POST" and request.POST.get("email"):
+#         student_email = request.POST.get("email")
+#         student = get_object_or_404(Student, email=student_email)
+#
+#         if course.students.filter(email=student_email).exists():
+#             course.students.remove(student)
+#
+#             return redirect('main:course_detail', course_slug=course.slug)
+#         else:
+#             return HttpResponse("Student not enrolled in course", status=400)
+#
+#     context = {
+#         "course": course
+#     }
+#
+#     return render(request, "main/unenrollment_course.html", context=context)
+
+
+class UnenrollmentCourseView(View):
+    def get_course(self, course_slug):
+        return get_object_or_404(Course.objects.prefetch_related('student'), slug=course_slug)
+
+    def get(self, request: HttpRequest, course_slug):
+        context = {
+            'course': self.get_course(course_slug)
+        }
+        return render(request, "main/unenrollment_course.html", context=context)
+
+    def post(self, request: HttpRequest, course_slug):
+        course = self.get_course(course_slug)
+
+        if request.POST.get('email'):
+            student_email = request.POST.get('email')
+            student = get_object_or_404(Student, email=student_email)
+
+            if course.students.filter(email=student_email).exists():
+                course.students.remove(student)
+                return redirect('main:course_detail', course_slug=course_slug)
+            else:
+                return HttpResponse("Student not enrolled in course", status=400)
+
+
+# def create_course(request: HttpRequest):
+#     if request.method == 'POST':
+#         form = forms.CourseForm(request.POST)
+#         if form.is_valid():
+#             Course.objects.create(**form.cleaned_data)
+#             return redirect('main:courses_list')
+#     else:
+#         form = forms.CourseForm()
+#
+#     context = {
+#         'form': form,
+#     }
+#     return render(request, "main/create-course.html", context=context)
+
+
+class CreateCourseView(View):
+    def get(self, request: HttpRequest):
+        context = {
+            'form': forms.CourseForm(),
+        }
+        return render(request, 'main/create-course.html', context=context)
+
+    def post(self, request: HttpRequest):
         form = forms.CourseForm(request.POST)
         if form.is_valid():
             Course.objects.create(**form.cleaned_data)
-            return redirect('main:courses_list')
-    else:
-        form = forms.CourseForm()
-
-    context = {
-        'form': form,
-    }
-    return render(request, "main/create-course.html", context=context)
 
 
-def create_lesson(request: HttpRequest):
-    if request.method == 'POST':
+# def create_lesson(request: HttpRequest):
+#     if request.method == 'POST':
+#         form = forms.LessonForm(request.POST)
+#         if form.is_valid():
+#             Lesson.objects.create(**form.cleaned_data)
+#             return redirect('main:courses_list')
+#     else:
+#         form = forms.LessonForm()
+#
+#     context = {
+#         'form': form,
+#     }
+#     return render(request, "main/create-lesson.html", context=context)
+
+
+class CreateLessonView(View):
+    def get(self, request: HttpRequest):
+        context = {
+            'form': forms.LessonForm(),
+        }
+        return render(request, 'main/create-lesson.html', context=context)
+
+    def post(self, request: HttpRequest):
         form = forms.LessonForm(request.POST)
         if form.is_valid():
             Lesson.objects.create(**form.cleaned_data)
-            return redirect('main:courses_list')
-    else:
-        form = forms.LessonForm()
 
-    context = {
-        'form': form,
-    }
-    return render(request, "main/create-lesson.html", context=context)
+
+

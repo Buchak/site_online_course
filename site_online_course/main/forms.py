@@ -13,3 +13,4 @@ class LessonForm(forms.ModelForm):
     class Meta:
         model = models.Lesson
         fields = ('title', 'content', 'video_url')
+
