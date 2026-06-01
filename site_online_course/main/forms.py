@@ -14,3 +14,13 @@ class LessonForm(forms.ModelForm):
         model = models.Lesson
         fields = ('title', 'content', 'video_url')
 
+
+class EnrollmentForm(forms.Form):
+    email = forms.EmailField(
+        label='Your Email',
+        required=True,
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'Введіть ваш email',
+            'class': 'form-input'
+        }),
+    )
