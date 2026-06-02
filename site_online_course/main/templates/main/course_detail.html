@@ -29,4 +29,14 @@
         <a href="{% url 'main:unenrollment_course' course.slug %}">Unenrollment from the course</a>
     </div>
 
+    <br>
+    <div>
+        <a href="{% url 'main:update_course' course_slug=course.slug %}">Update {{ course.title }}</a>
+    </div>
+
+    <br>
+    <div>
+        <a href="{% url 'main:delete_course' course_slug=course.slug %}">Delete {{ course.title }}</a>
+    </div>
+
 {% endblock %}

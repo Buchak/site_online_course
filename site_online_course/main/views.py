@@ -1,8 +1,8 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, reverse
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 
 from .models import Course, Category, Student, Lesson
@@ -204,7 +204,32 @@ class UnenrollmentCourseView(View):
 class CourseCreateView(CreateView):
     model = Course
     form_class = forms.CourseForm
+
+    def get_success_url(self):
+        return reverse(
+            'main:course_detail',
+            kwargs={'course_slug': self.object.slug}
+        )
+
+
+class CourseUpdateView(UpdateView):
+    model = Course
+    form_class = forms.CourseForm
+    template_name_suffix = '_update_form'
+    slug_url_kwarg = 'course_slug'
+
+    def get_success_url(self):
+        return reverse(
+            'main:course_detail',
+            kwargs={'course_slug': self.object.slug}
+        )
+
+
+class CourseDeleteView(DeleteView):
+    model = Course
     success_url = reverse_lazy('main:courses_list')
+    template_name_suffix = '_delete'
+    slug_url_kwarg = 'course_slug'
 
 
 # def create_lesson(request: HttpRequest):
@@ -219,17 +244,10 @@ class CourseCreateView(CreateView):
 #     context = {
 #         'form': form,
 #     }
-#     return render(request, "main/create-lesson.html", context=context)
+#     return render(request, "main/lesson_form.html", context=context)
 
 
-class CreateLessonView(View):
-    def get(self, request: HttpRequest):
-        context = {
-            'form': forms.LessonForm(),
-        }
-        return render(request, 'main/create-lesson.html', context=context)
-
-    def post(self, request: HttpRequest):
-        form = forms.LessonForm(request.POST)
-        if form.is_valid():
-            Lesson.objects.create(**form.cleaned_data)
+class LessonCreateView(CreateView):
+    model = Lesson
+    fields = ['title', 'content']
+    success_url = reverse_lazy('main:courses-list')

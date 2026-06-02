@@ -9,10 +9,10 @@ class CourseForm(forms.ModelForm):
         fields = ('title', 'price', 'category', 'description')
 
 
-class LessonForm(forms.ModelForm):
-    class Meta:
-        model = models.Lesson
-        fields = ('title', 'content', 'video_url')
+# class LessonForm(forms.ModelForm):
+#     class Meta:
+#         model = models.Lesson
+#         fields = ('title', 'content', 'video_url')
 
 
 class EnrollmentForm(forms.Form):
