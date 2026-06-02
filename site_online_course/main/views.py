@@ -36,18 +36,21 @@ class CourseDetailsView(DetailView):
     slug_url_kwarg = 'course_slug'
 
 
-class LessonDetilView(DetailView):
+# def lesson_detail(request, course_slug, lesson_slug):
+#     course = Course.objects.get(slug=course_slug)
+#     context = {
+#         "lesson": course.lessons.get(slug=lesson_slug)
+#     }
+#     return render(request, "main/lesson_detail.html", context=context)
+
+
+class LessonDetailView(DetailView):
     template_name = 'main/lesson_detail.html'
     model = Course
     context_object_name = 'lesson'
 
 
-def lesson_detail(request, course_slug, lesson_slug):
-    course = Course.objects.get(slug=course_slug)
-    context = {
-        "lesson": course.lessons.get(slug=lesson_slug)
-    }
-    return render(request, "main/lesson_detail.html", context=context)
+#
 
 
 # def students_list(request, course_slug):

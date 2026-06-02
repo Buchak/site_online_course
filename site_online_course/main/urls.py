@@ -11,7 +11,7 @@ urlpatterns = [
     path('courses/<slug:course_slug>/enrollment', views.EnrollmentCourseView.as_view(), name='enrollment_course'),
     path('courses/<slug:course_slug>/unenrollment', views.UnenrollmentCourseView.as_view(), name='unenrollment_course'),
     path('courses/<slug:course_slug>/students', views.StudentsListView.as_view(), name='students_list'),
-    path('courses/<slug:course_slug>/<slug:lesson_slug>', views.lesson_detail, name='lesson_detail'),
+    path('courses/<slug:course_slug>/<slug:lesson_slug>', views.LessonDetailView.as_view(), name='lesson_detail'),
     path('create-course/', views.CreateCourseView.as_view(), name='create_course'),
     path('create-lesson/', views.CreateLessonView.as_view(), name='create_lesson'),
 ]
