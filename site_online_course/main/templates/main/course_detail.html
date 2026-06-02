@@ -9,7 +9,7 @@
     <p>Price: {{ course.price }}</p>
     <p>{{ course.description }}</p>
 
-    <h3>Lessonos:</h3>
+    <h3>Lessons:</h3>
     {% for lesson in course.lessons.all %}
         <a href="{% url 'main:lesson_detail' course.slug lesson.slug %}">{{ lesson.title }}</a>
     {% endfor %}
@@ -28,7 +28,5 @@
     <div>
         <a href="{% url 'main:unenrollment_course' course.slug %}">Unenrollment from the course</a>
     </div>
-
-
 
 {% endblock %}

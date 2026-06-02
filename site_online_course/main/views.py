@@ -2,7 +2,8 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, CreateView
+from django.urls import reverse_lazy
 
 from .models import Course, Category, Student, Lesson
 from . import forms
@@ -185,7 +186,6 @@ class UnenrollmentCourseView(View):
         return render(request, 'main/unenrollment_course.html', context=context)
 
 
-
 # def create_course(request: HttpRequest):
 #     if request.method == 'POST':
 #         form = forms.CourseForm(request.POST)
@@ -198,20 +198,13 @@ class UnenrollmentCourseView(View):
 #     context = {
 #         'form': form,
 #     }
-#     return render(request, "main/create-course.html", context=context)
+#     return render(request, "main/course_form.html", context=context)
 
 
-class CreateCourseView(View):
-    def get(self, request: HttpRequest):
-        context = {
-            'form': forms.CourseForm(),
-        }
-        return render(request, 'main/create-course.html', context=context)
-
-    def post(self, request: HttpRequest):
-        form = forms.CourseForm(request.POST)
-        if form.is_valid():
-            Course.objects.create(**form.cleaned_data)
+class CourseCreateView(CreateView):
+    model = Course
+    form_class = forms.CourseForm
+    success_url = reverse_lazy('main:courses_list')
 
 
 # def create_lesson(request: HttpRequest):
@@ -240,6 +233,3 @@ class CreateLessonView(View):
         form = forms.LessonForm(request.POST)
         if form.is_valid():
             Lesson.objects.create(**form.cleaned_data)
-
-
-

@@ -7,6 +7,11 @@
 {% block body %}
 	<h1>Courses:</h1>
 
+    <div>
+        <a href="{% url 'main:create_course' %}">Create Course</a>
+    </div>
+    <br>
+
     {% for cours in courses %}
         <div>
             <a href="{% url 'main:course_detail' cours.slug %}">{{ cours.title }}</a>
