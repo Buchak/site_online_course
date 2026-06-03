@@ -15,4 +15,14 @@
     <h3>Video</h3>
         <a href="#">Video</a>
     </div>
+
+    <br>
+    <div>
+        <a href="{% url 'main:update_lesson' course_slug=lesson.course.slug lesson_slug=lesson.slug %}">Update Lesson</a>
+    </div>
+
+    <br>
+    <div>
+        <a href="{% url 'main:delete_lesson' course_slug=lesson.course.slug lesson_slug=lesson.slug %}">Delete Lesson</a>
+    </div>
 {% endblock %}

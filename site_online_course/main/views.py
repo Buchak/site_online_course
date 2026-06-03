@@ -47,11 +47,9 @@ class CourseDetailsView(DetailView):
 
 class LessonDetailView(DetailView):
     template_name = 'main/lesson_detail.html'
-    model = Course
+    model = Lesson
     context_object_name = 'lesson'
-
-
-#
+    slug_url_kwarg = 'lesson_slug'
 
 
 # def students_list(request, course_slug):
@@ -71,6 +69,11 @@ def category_list(request):
         "categories": Category.objects.all()
     }
     return render(request, "main/category_list.html", context=context)
+
+
+# class CategoryListView(ListView):
+#     model = Category
+#     context_object_name = 'category'
 
 
 def category_detail(request, category_slug):
@@ -249,5 +252,45 @@ class CourseDeleteView(DeleteView):
 
 class LessonCreateView(CreateView):
     model = Lesson
-    fields = ['title', 'content']
-    success_url = reverse_lazy('main:courses-list')
+    fields = ['title', 'content', 'video_url']
+    slug_url_kwarg = 'course_slug'
+
+    def form_valid(self, form):
+        course_slug = self.kwargs.get('course_slug')
+        course = get_object_or_404(Course, slug=course_slug)
+        form.instance.course = course
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse(
+            'main:course_detail',
+            kwargs={'course_slug': self.object.course.slug}
+        )
+
+
+class LessonUpdateView(UpdateView):
+    model = Lesson
+    fields = ['title', 'content', 'video_url']
+    slug_url_kwarg = 'lesson_slug'
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self):
+        return reverse(
+            'main:lesson_detail',
+            kwargs={'course_slug': self.kwargs.get('course_slug'),
+                    'lesson_slug': self.object.slug}
+        )
+
+
+class LessonDeleteView(DeleteView):
+    model = Lesson
+    slug_url_kwarg = 'lesson_slug'
+    template_name_suffix = '_delete'
+
+    def get_success_url(self):
+        return reverse(
+            'main:course_detail',
+            kwargs={'course_slug': self.kwargs.get('course_slug')}
+        )
+
+
