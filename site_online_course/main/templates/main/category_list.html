@@ -6,6 +6,12 @@
 
 {% block body %}
 	<h1>Categories</h1>
+
+    <div>
+        <a href="{% url 'main:create_category' %}">Create Category</a>
+    </div>
+    <br>
+
     <ul>
         {% for category in categories %}
             <li>

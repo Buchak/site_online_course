@@ -64,23 +64,35 @@ class StudentsListView(ListView):
     context_object_name = 'students'
 
 
-def category_list(request):
-    context = {
-        "categories": Category.objects.all()
-    }
-    return render(request, "main/category_list.html", context=context)
+# def category_list(request):
+#     context = {
+#         "categories": Category.objects.all()
+#     }
+#     return render(request, "main/category_list.html", context=context)
 
 
-# class CategoryListView(ListView):
-#     model = Category
-#     context_object_name = 'category'
+class CategoryListView(ListView):
+    model = Category
+    context_object_name = 'categories'
 
 
-def category_detail(request, category_slug):
-    context = {
-        "category": Category.objects.prefetch_related("courses").get(slug=category_slug)
-    }
-    return render(request, "main/category_detail.html", context=context)
+# def category_detail(request, category_slug):
+#     context = {
+#         "category": Category.objects.prefetch_related("courses").get(slug=category_slug)
+#     }
+#     return render(request, "main/category_detail.html", context=context)
+
+
+class CategoryDetailView(DetailView):
+    model = Category
+    context_object_name = 'category'
+    slug_url_kwarg = 'category_slug'
+
+
+class CategoryCreateView(CreateView):
+    model = Category
+    fields = ['name',]
+    success_url = reverse_lazy('main:category_list')
 
 
 # def enrollment_course(request: HttpRequest, course_slug):

@@ -4,8 +4,9 @@ from django.urls import path, include
 app_name = 'main'
 
 urlpatterns = [
-    path('category/<slug:category_slug>/', views.category_detail, name='category_detail'),
-    path('category/', views.category_list, name='category_list'),
+    path('category/', views.CategoryListView.as_view(), name='category_list'),
+    path('category/create-category', views.CategoryCreateView.as_view(), name='create_category'),
+    path('category/<slug:category_slug>/', views.CategoryDetailView.as_view(), name='category_detail'),
 
     path('create-course/', views.CourseCreateView.as_view(), name='create_course'),
     path('courses/', views.CoursesListView.as_view(), name='courses_list'),
