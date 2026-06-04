@@ -95,6 +95,24 @@ class CategoryCreateView(CreateView):
     success_url = reverse_lazy('main:category_list')
 
 
+class CategoryUpdateView(UpdateView):
+    model = Category
+    fields = ['name',]
+    slug_url_kwarg = 'category_slug'
+
+    def get_success_url(self):
+        return reverse(
+            'main:category_detail',
+            kwargs={'category_slug': self.object.slug}
+        )
+
+
+class CategoryDeleteView(DeleteView):
+    model = Category
+    slug_url_kwarg = 'category_slug'
+    success_url = reverse_lazy('main:category_list')
+
+
 # def enrollment_course(request: HttpRequest, course_slug):
 #     course = get_object_or_404(Course.objects.prefetch_related("students"), slug=course_slug)
 #

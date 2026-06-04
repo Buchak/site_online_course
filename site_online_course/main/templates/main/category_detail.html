@@ -6,6 +6,15 @@
 
 {% block body %}
 	<h1>Courses from category {{ category.name }}</h1>
+
+    <div>
+        <a href="{% url 'main:update_category' category_slug=category.slug %}">Update Category</a>
+    </div>
+
+    <div>
+        <a href="{% url 'main:delete_category' category_slug=category.slug %}">Delete Category</a>
+    </div>
+
     <ul>
         {% for course in category.courses.all %}
             <li>
