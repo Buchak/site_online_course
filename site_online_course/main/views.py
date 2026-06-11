@@ -2,8 +2,9 @@ from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404, redirect, reverse
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+
 
 from .models import Course, Category, Student, Lesson
 from . import forms
@@ -99,6 +100,7 @@ class CategoryUpdateView(UpdateView):
     model = Category
     fields = ['name',]
     slug_url_kwarg = 'category_slug'
+    template_name_suffix = '_update_form'
 
     def get_success_url(self):
         return reverse(
