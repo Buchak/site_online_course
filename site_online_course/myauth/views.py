@@ -15,6 +15,7 @@ def login_view(request: HttpRequest) -> HttpResponse:
 
     user = authenticate(request, username=username, password=password)
     if user is not None:
+        login(request, user)
         return redirect('main:courses_list')
 
     return render(request, 'myauth/login.html', {'error': 'Invalid username or password'})
