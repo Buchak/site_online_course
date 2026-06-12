@@ -11,6 +11,17 @@
 <body>
 
 <div>
+    {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'myauth:logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'myauth:login' %}">Login</a>
+    {% endif %}
+</div>
+
+<div>
     <a href="{% url 'main:courses_list' %}">Courses List</a>
 </div>
 <div>
