@@ -26,8 +26,20 @@ from django.views.generic import CreateView, TemplateView
 
 class RegisterView(CreateView):
     form_class = UserCreationForm
-    template_name = ''
-    success_url = reverse_lazy('')
+    template_name = 'myauth/register.html'
+    success_url = reverse_lazy('myauth:profile')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        user = authenticate(
+            self.request,
+            username=form.cleaned_data['username'],
+            password=form.cleaned_data['password1']
+        )
+        login(self.request, user)
+
+        return response
 
 
 class ProfileView(TemplateView):
