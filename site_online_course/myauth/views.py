@@ -1,8 +1,10 @@
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login
 from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
+from django.views.generic import CreateView, TemplateView
 
 
 # def login_view(request: HttpRequest) -> HttpResponse:
@@ -21,6 +23,15 @@ from django.contrib.auth.views import LoginView, LogoutView
 #         return redirect('main:courses_list')
 #
 #     return render(request, 'myauth/login.html', {'error': 'Invalid username or password'})
+
+class RegisterView(CreateView):
+    form_class = UserCreationForm
+    template_name = ''
+    success_url = reverse_lazy('')
+
+
+class ProfileView(TemplateView):
+    template_name = 'myauth/profile.html'
 
 
 class MyLoginView(LoginView):
