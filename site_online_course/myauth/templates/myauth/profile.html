@@ -11,6 +11,7 @@
         <p>Username: {{ user.username }}</p>
         <p>Firstname: {{ user.first_name }}</p>
         <p>Lastname: {{ user.last_name }}</p>
+        <p>Bio: {{ user.profile.bio }}</p>
     {% else %}
         <p>User is anonymous</p>
         <a href="{% url 'myauth:login' %}">Login</a>

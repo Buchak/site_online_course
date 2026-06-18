@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic import CreateView, TemplateView
 
+from . import models
+
 
 # def login_view(request: HttpRequest) -> HttpResponse:
 #     if request.method == "GET":
@@ -31,6 +33,7 @@ class RegisterView(CreateView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
+        models.Profile.objects.create(user=self.object)
 
         user = authenticate(
             self.request,
