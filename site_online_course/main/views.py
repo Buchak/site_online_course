@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.generics import ListAPIView, GenericAPIView
+from rest_framework.generics import ListAPIView, GenericAPIView, RetrieveAPIView
 from rest_framework.mixins import ListModelMixin
 from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
@@ -48,13 +48,20 @@ class CategoryViewSet(ModelViewSet):
 
 class LessonViewSet(ModelViewSet):
     queryset = Lesson.objects.all()
-    serializer_class = serializers.LessonSerializer
     filter_backends = [
         DjangoFilterBackend,
         OrderingFilter,
     ]
     filterset_fields = ['title']
     ordering_fields = ['title']
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return serializers.LessonSerializer
+        if self.action == 'retrieve':
+            return serializers.LessonDetailSerializer
+
+        return serializers.LessonDetailSerializer
 
 
 class StudentListAPIView(ListAPIView):
@@ -98,6 +105,11 @@ class TeacherListAPIView(ListAPIView):
     ordering = [
         'first_name'
     ]
+
+
+class TeacherDetailAPIView(RetrieveAPIView):
+    queryset = Teacher.objects.all()
+    serializer_class = serializers.TeacherDetailSerializer
 
 
 # def courses_list(request):
