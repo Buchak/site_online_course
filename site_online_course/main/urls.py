@@ -19,6 +19,8 @@ urlpatterns = [
     path('api/courses/', include(routers_course.urls)),
     path('api/category/', include(routers_category.urls)),
     path('api/lesson/', include(routers_lesson.urls)),
+    path('api/student/', views.StudentListAPIView.as_view(), name="student_list_api"),
+    path('api/teacher/', views.TeacherListAPIView.as_view(), name="teacher_list_api"),
 
     path('category/', views.CategoryListView.as_view(), name='category_list'),
     path('category/create-category', views.CategoryCreateView.as_view(), name='create_category'),

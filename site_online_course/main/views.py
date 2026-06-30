@@ -11,7 +11,7 @@ from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 
 
-from .models import Course, Category, Student, Lesson
+from .models import Course, Category, Student, Lesson, Teacher
 from . import forms, serializers
 
 
@@ -55,6 +55,49 @@ class LessonViewSet(ModelViewSet):
     ]
     filterset_fields = ['title']
     ordering_fields = ['title']
+
+
+class StudentListAPIView(ListAPIView):
+    queryset = Student.objects.all()
+    serializer_class = serializers.StudentSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    filterset_fields = [
+        'first_name',
+        'last_name',
+        'email',
+        'age'
+    ]
+    ordering_fields = [
+        'first_name',
+        'last_name'
+    ]
+    ordering = [
+        'first_name'
+    ]
+
+
+class TeacherListAPIView(ListAPIView):
+    queryset = Teacher.objects.all()
+    serializer_class = serializers.TeacherSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    filterset_fields = [
+        'first_name',
+        'last_name',
+        'email'
+    ]
+    ordering_fields = [
+        'first_name',
+        'last_name',
+    ]
+    ordering = [
+        'first_name'
+    ]
 
 
 # def courses_list(request):
