@@ -46,6 +46,17 @@ class CategoryViewSet(ModelViewSet):
     ordering_fields = ['name']
 
 
+class LessonViewSet(ModelViewSet):
+    queryset = Lesson.objects.all()
+    serializer_class = serializers.LessonSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    filterset_fields = ['title']
+    ordering_fields = ['title']
+
+
 # def courses_list(request):
 #     context = {
 #         "courses": Course.objects.prefetch_related("teachers", "students").all(),

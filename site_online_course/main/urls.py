@@ -11,10 +11,14 @@ routers_course.register('courses', views.CourseViewSet)
 routers_category = DefaultRouter()
 routers_category.register('categories', views.CategoryViewSet)
 
+routers_lesson = DefaultRouter()
+routers_lesson.register('lessons', views.LessonViewSet)
+
 
 urlpatterns = [
     path('api/courses/', include(routers_course.urls)),
     path('api/category/', include(routers_category.urls)),
+    path('api/lesson/', include(routers_lesson.urls)),
 
     path('category/', views.CategoryListView.as_view(), name='category_list'),
     path('category/create-category', views.CategoryCreateView.as_view(), name='create_category'),
