@@ -4,10 +4,12 @@ from django.shortcuts import get_object_or_404, redirect, reverse
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from rest_framework.generics import ListAPIView, GenericAPIView
+from rest_framework.mixins import ListModelMixin
 
 
 from .models import Course, Category, Student, Lesson
-from . import forms
+from . import forms, serializers
 
 
 # def courses_list(request):
