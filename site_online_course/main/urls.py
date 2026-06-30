@@ -1,11 +1,20 @@
+from rest_framework.routers import DefaultRouter
+
 from . import views
 from django.urls import path, include
 
 app_name = 'main'
 
+routers_course = DefaultRouter()
+routers_course.register('courses', views.CourseViewSet)
+
+routers_category = DefaultRouter()
+routers_category.register('categories', views.CategoryViewSet)
+
+
 urlpatterns = [
-    path('api/courses/', views.CoursesApiView.as_view(), name='api_courses'),
-    path('api/category/', views.CategoryApiView.as_view(), name='api_category'),
+    path('api/courses/', include(routers_course.urls)),
+    path('api/category/', include(routers_category.urls)),
 
     path('category/', views.CategoryListView.as_view(), name='category_list'),
     path('category/create-category', views.CategoryCreateView.as_view(), name='create_category'),

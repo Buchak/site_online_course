@@ -4,12 +4,46 @@ from django.shortcuts import get_object_or_404, redirect, reverse
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.generics import ListAPIView, GenericAPIView
 from rest_framework.mixins import ListModelMixin
+from rest_framework.viewsets import ModelViewSet
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 from .models import Course, Category, Student, Lesson
 from . import forms, serializers
+
+
+class CourseViewSet(ModelViewSet):
+    queryset = Course.objects.all()
+    serializer_class = serializers.CourseSerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    filterset_fields = [
+        'title',
+        'price',
+        'created_at',
+        'is_published'
+    ]
+    ordering_fields = [
+        'pk',
+        'title',
+        'price',
+    ]
+
+
+class CategoryViewSet(ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = serializers.CategorySerializer
+    filter_backends = [
+        DjangoFilterBackend,
+        OrderingFilter,
+    ]
+    filterset_fields = ['name']
+    ordering_fields = ['name']
 
 
 # def courses_list(request):
